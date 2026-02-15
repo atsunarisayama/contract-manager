@@ -70,7 +70,7 @@ const ContractManager = () => {
 
     try {
       // 最も安定したエンドポイントを使用
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${geminiApiKey}`;
       
       const response = await fetch(apiUrl, {
         method: 'POST',
