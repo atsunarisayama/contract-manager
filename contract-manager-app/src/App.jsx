@@ -92,7 +92,7 @@ SUGGEST: {"name": "契約名", "url": "URL", "category": "カテゴリ", "monthl
 
     try {
       // モデル名を gemini-2.0-flash に完全固定
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${geminiApiKey}`;
       
       const response = await fetch(apiUrl, {
         method: 'POST',
