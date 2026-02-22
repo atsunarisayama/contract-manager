@@ -20,6 +20,8 @@ const ContractManager = () => {
   const [showApiKeyInput, setShowApiKeyInput] = useState(false);
   const [accessToken, setAccessToken] = useState(null);
   const [driveFileId, setDriveFileId] = useState(null);
+  // ✅ 修正: 手動追加用の専用state
+  const [newContract, setNewContract] = useState({ name: '', monthlyFee: '' });
   const chatEndRef = useRef(null);
 
   // 1. 初期化ロジック
@@ -111,6 +113,8 @@ const ContractManager = () => {
     if (accessToken) await saveDataToDrive(updated);
     setShowAddModal(false);
     setShowAISuggestion(false);
+    // ✅ 修正: 追加後にフォームをリセット
+    setNewContract({ name: '', monthlyFee: '' });
   };
 
   const deleteContract = async (id) => {
@@ -177,7 +181,7 @@ const ContractManager = () => {
               </button>
             </div>
           </div>
-          <button onClick={() => setShowAddModal(true)} className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-200 flex items-center justify-center gap-2 mb-4">
+          <button onClick={() => { setNewContract({ name: '', monthlyFee: '' }); setShowAddModal(true); }} className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-200 flex items-center justify-center gap-2 mb-4">
             <Plus className="w-5 h-5" /> 手動で追加
           </button>
           <div className="p-3 bg-white rounded-xl border border-gray-200 shadow-sm flex justify-between items-center">
@@ -278,14 +282,15 @@ const ContractManager = () => {
         </div>
       )}
 
+      {/* ✅ 修正: 手動追加モーダル - 専用stateを使用 */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-[100] p-4">
           <div className="bg-white rounded-3xl p-8 w-full max-w-sm">
             <h3 className="font-black text-xl mb-6">新規サブスク登録</h3>
-            <input type="text" placeholder="サービス名" className="w-full p-4 bg-gray-50 rounded-2xl mb-3 border-none focus:ring-2 focus:ring-blue-500" value={aiSuggestion?.name || ''} onChange={e=>setAiSuggestion({...aiSuggestion, name:e.target.value})} />
-            <input type="number" placeholder="月額" className="w-full p-4 bg-gray-50 rounded-2xl mb-6 border-none focus:ring-2 focus:ring-blue-500" value={aiSuggestion?.monthlyFee || ''} onChange={e=>setAiSuggestion({...aiSuggestion, monthlyFee:e.target.value})} />
+            <input type="text" placeholder="サービス名" className="w-full p-4 bg-gray-50 rounded-2xl mb-3 border-none focus:ring-2 focus:ring-blue-500" value={newContract.name} onChange={e=>setNewContract({...newContract, name:e.target.value})} />
+            <input type="number" placeholder="月額" className="w-full p-4 bg-gray-50 rounded-2xl mb-6 border-none focus:ring-2 focus:ring-blue-500" value={newContract.monthlyFee} onChange={e=>setNewContract({...newContract, monthlyFee:e.target.value})} />
             <div className="flex gap-3">
-              <button onClick={()=>addContract({name:aiSuggestion.name, monthlyFee:aiSuggestion.monthlyFee})} className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black shadow-lg shadow-blue-200">登録</button>
+              <button onClick={()=>addContract(newContract)} className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black shadow-lg shadow-blue-200">登録</button>
               <button onClick={()=>setShowAddModal(false)} className="flex-1 py-4 bg-gray-100 text-gray-400 rounded-2xl font-black">キャンセル</button>
             </div>
           </div>
